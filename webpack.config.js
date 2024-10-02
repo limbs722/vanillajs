@@ -25,11 +25,21 @@ module.exports = () => {
                     ],
                 },
                 {
-                    test: /\.(css|scss)$/,
+                    test: /\.s[ac]ss$/i,
                     use: [
-                        MiniCssExtractPlugin.loader,
-                        'css-loader',
-                        'sass-loader',
+                        'style-loader',
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                sourceMap: true,
+                            },
+                        },
+                        {
+                            loader: 'sass-loader',
+                            options: {
+                                sourceMap: true,
+                            },
+                        },
                     ],
                 },
                 {
@@ -42,17 +52,23 @@ module.exports = () => {
         },
         plugins: [
             new HtmlWebpackPlugin({ template: './src/index.html' }),
-            new MiniCssExtractPlugin({
-                filename: '[name].css',
-                chunkFilename: '[id].css',
-            }),
+            // new MiniCssExtractPlugin({
+            //     filename: '[name].css',
+            //     chunkFilename: '[id].css',
+            // }),
         ],
         optimization: { minimize: true },
+        // resolve: {
+        //     modules: ['node_modules'],
+        //     extensions: ['.ts', '.js', '.json', '.css', '.scss'],
+        //     alias: {
+        //         '@': path.join(__dirname, './src'),
+        //     },
+        // },
         resolve: {
-            modules: ['node_modules'],
-            extensions: ['.ts', '.js', '.json', '.scss'],
+            extensions: ['.ts', '.js'],
             alias: {
-                '@': path.join(__dirname, 'src'),
+                '@': path.resolve(__dirname, './src'),
             },
         },
         output: {
