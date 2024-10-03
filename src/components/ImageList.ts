@@ -1,28 +1,10 @@
-import axios from 'axios';
+import type { ImageType } from '../Types';
 
-// [{"id":"bo2","url":"https://cdn2.thecatapi.com/images/bo2.jpg","width":533,"height":800}]
-type ImageType = {
-    id: string;
-    url: string;
-    width: number;
-    height: number;
-};
-
-function ImageList() {
-    const getImages = async () => {
-        const response = await axios.get(
-            'https://api.thecatapi.com/v1/images/search?limit=10',
-        );
-
-        return response.data || [];
-    };
-
+function ImageList(images: ImageType[]) {
     const imageListElement = document.createElement('div');
     imageListElement.className = 'wrapper-image-list';
 
-    const render = async () => {
-        const images = await getImages();
-
+    const render = () => {
         images.forEach((image: ImageType) => {
             const imageWrapperElement = document.createElement('div');
             const imageElement = document.createElement('img');
@@ -36,8 +18,8 @@ function ImageList() {
             imageWrapperElement.appendChild(imageElement);
         });
     };
-
     render();
+
     return imageListElement;
 }
 
