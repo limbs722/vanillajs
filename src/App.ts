@@ -77,21 +77,25 @@ function renderLayout(images: ImageType[]) {
 }
 
 function onSearch() {
+    isLoading = true;
+    currentPage = 1;
     const search = (document.getElementById('#searchInput') as HTMLInputElement)
         .value;
-    apiGetImages({ query: search }).then((response) => {
-        setState(response);
-    });
+    apiGetImages({ query: search, page: currentPage })
+        .then((response) => {
+            setState(response);
+        })
+        .finally(() => (isLoading = false));
 }
 
 async function loadMoreImages() {
     isLoading = true; // 로딩 시작
 
-    const response = await apiGetImages({ query: '', page: currentPage });
-    if (response) {
-        setState(response);
-        isLoading = false;
-    }
+    await apiGetImages({ query: '', page: currentPage })
+        .then((res) => {
+            setState(res);
+        })
+        .finally(() => (isLoading = false));
 }
 
 function setState(newState: ImageType[]) {
@@ -101,11 +105,11 @@ function setState(newState: ImageType[]) {
 
 async function initApp() {
     isLoading = true;
-    items = await apiGetImages({ query: '', page: currentPage });
-    if (items) {
-        renderLayout(items);
-        isLoading = false;
-    }
+    await apiGetImages({ query: '', page: currentPage })
+        .then((res) => {
+            renderLayout(res);
+        })
+        .finally(() => (isLoading = false));
 }
 
 function App() {
