@@ -14,6 +14,26 @@ function createSection(id: string): HTMLElement {
     return section;
 }
 
+function showSpinner() {
+    const appElement = document.getElementById('app')!;
+    const spinnerWrapper = document.createElement('div');
+    spinnerWrapper.className = 'wrapper-spinner';
+
+    const spinner = document.createElement('div');
+    spinner.className = 'spinner';
+
+    spinnerWrapper.appendChild(spinner);
+    appElement.appendChild(spinnerWrapper);
+}
+
+function hideSpinner() {
+    const appElement = document.getElementById('app')!;
+    const spinnerWrapper = appElement.querySelector('.wrapper-spinner');
+    if (spinnerWrapper) {
+        appElement.removeChild(spinnerWrapper);
+    }
+}
+
 // 레이아웃을 정의하는 함수
 function renderLayout(images: ImageType[]) {
     const appElement = document.getElementById('app')!;
@@ -79,23 +99,33 @@ function renderLayout(images: ImageType[]) {
 function onSearch() {
     isLoading = true;
     currentPage = 1;
+    showSpinner();
     const search = (document.getElementById('#searchInput') as HTMLInputElement)
         .value;
     apiGetImages({ query: search, page: currentPage })
         .then((response) => {
+            setInterval(() => {}, 3000);
             setState(response);
         })
-        .finally(() => (isLoading = false));
+        .finally(() => {
+            isLoading = false;
+            hideSpinner();
+        });
 }
 
 async function loadMoreImages() {
     isLoading = true; // 로딩 시작
+    showSpinner();
 
     await apiGetImages({ query: '', page: currentPage })
         .then((res) => {
+            setInterval(() => {}, 3000);
             setState(res);
         })
-        .finally(() => (isLoading = false));
+        .finally(() => {
+            isLoading = false;
+            hideSpinner();
+        });
 }
 
 function setState(newState: ImageType[]) {
@@ -105,11 +135,16 @@ function setState(newState: ImageType[]) {
 
 async function initApp() {
     isLoading = true;
+    showSpinner();
     await apiGetImages({ query: '', page: currentPage })
         .then((res) => {
+            setInterval(() => {}, 3000);
             renderLayout(res);
         })
-        .finally(() => (isLoading = false));
+        .finally(() => {
+            isLoading = false;
+            hideSpinner();
+        });
 }
 
 function App() {
