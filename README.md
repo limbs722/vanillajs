@@ -1,4 +1,4 @@
-### 실행 방법
+## 실행 방법
 # npm install -> npm start
 
 ### 기능 구현 목록
