@@ -1,3 +1,4 @@
+import { Image } from './';
 import type { ImageType } from '../Types';
 
 function ImageList(images: ImageType[]) {
@@ -6,16 +7,8 @@ function ImageList(images: ImageType[]) {
 
     const render = () => {
         images.forEach((image: ImageType) => {
-            const imageWrapperElement = document.createElement('div');
-            const imageElement = document.createElement('img');
-            imageWrapperElement.className = 'image-wrapper';
-            imageElement.src = image.url;
-            imageElement.alt = '고양이 이미지';
-            imageElement.width = 150;
-            imageElement.height = 150;
-
-            imageListElement.appendChild(imageWrapperElement);
-            imageWrapperElement.appendChild(imageElement);
+            const imageElement = Image(image);
+            imageListElement.appendChild(imageElement);
         });
     };
     render();
